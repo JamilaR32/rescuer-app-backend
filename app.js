@@ -2,8 +2,8 @@
 const express = require("express");
 // const { localStrategy, jwtStrategy } = require("./middlewares/passports");
 // const passport = require("passport");
-const errorHandler = require("./middlewares/errorHandler");
-const notFoundHandler = require("./middlewares/notFoundHandler");
+const errorHandler = require("./src/middlewares/errorHandler");
+const notFoundHandler = require("./src/middlewares/notFoundHandler");
 const morgan = require("morgan");
 const cors = require("cors");
 const requestRoutes = require("./api/requests/routes");

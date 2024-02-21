@@ -5,6 +5,7 @@ const RequestSchema = new Schema({
   user: [{ type: Schema.Types.ObjectId, ref: "Skill" }],
   location: { type: String, required: true },
   helper: { type: Schema.Types.ObjectId, ref: "Helper" },
+  status: { type: String, enum: ["close", "open"] },
 });
 
 module.exports = model("Request", RequestSchema);
