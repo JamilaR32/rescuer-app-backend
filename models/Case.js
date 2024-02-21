@@ -1,8 +1,8 @@
 const { model, Schema } = require("mongoose");
 
-const SkillSchema = new Schema({
+const CaseSchema = new Schema({
   name: { type: String, required: true },
   request: [{ type: Schema.Types.ObjectId, ref: "Helper" }],
 });
 
-module.exports = model("Skill", SkillSchema);
+module.exports = model("Case", CaseSchema);
