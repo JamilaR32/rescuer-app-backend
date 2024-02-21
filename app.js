@@ -1,7 +1,7 @@
 //express setup
 const express = require("express");
-// const { localStrategy, jwtStrategy } = require("./middlewares/passports");
-// const passport = require("passport");
+const { localStrategy, jwtStrategy } = require("./middlewares/passports");
+const passport = require("passport");
 const errorHandler = require("./middlewares/errorHandler");
 const notFoundHandler = require("./middlewares/notFoundHandler");
 const morgan = require("morgan");
@@ -13,9 +13,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-// app.use(passport.initialize());
-// passport.use("local", localStrategy);
-// passport.use("jwt", jwtStrategy);
+app.use(passport.initialize());
+passport.use("local", localStrategy);
+passport.use("jwt", jwtStrategy);
 
 //router setup
 app.use("/api", requestRoutes);
