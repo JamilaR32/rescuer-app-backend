@@ -7,6 +7,7 @@ const notFoundHandler = require("./middlewares/notFoundHandler");
 const morgan = require("morgan");
 const cors = require("cors");
 const requestRoutes = require("./api/requests/routes");
+const authRoutes = require("./api/auth/routes");
 const connectDB = require("./database");
 const app = express();
 
@@ -19,6 +20,7 @@ passport.use("jwt", jwtStrategy);
 
 //router setup
 app.use("/api", requestRoutes);
+app.use("/api", authRoutes);
 
 //not found handler
 app.use(notFoundHandler);
