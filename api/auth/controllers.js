@@ -1,3 +1,5 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
 // your controller here
 ///
 const bcrypt = require("bcrypt");
