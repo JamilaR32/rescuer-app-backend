@@ -14,6 +14,10 @@ router.post("/register", register);
 
 router.post(
   "/login",
+  (req, res, next) => {
+    console.log("first");
+    next();
+  },
   passport.authenticate("local", { session: false }),
   login
 );

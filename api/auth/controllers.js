@@ -47,7 +47,10 @@ const register = async (req, res, next) => {
 
 ///sign-in
 const login = async (req, res, next) => {
+  // console.log("first");
   try {
+    console.log("2222");
+    console.log(req.user);
     const token = generateToken(req.user);
     return res.status(200).json({ token });
   } catch (err) {
