@@ -16,4 +16,5 @@ git push --set-upstream origin YourBranchName // we agree to name using our own 
 //quick fix
 rm -rf node_modules/
 
+
 npm update
