@@ -29,7 +29,7 @@ const deleteRequest = async (req, res, next) => {
   const { _id } = req.params;
   try {
     console.log(req.body);
-    await Request.findByIdAndRemove({ _id });
+    await Request.findByIdAndDelete({ _id }); //delete not remove however before deletion we should find a way to relocate
     res.status(204).end();
   } catch (error) {
     next(error);
