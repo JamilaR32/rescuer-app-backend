@@ -1,3 +1,5 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
 //express setup
 const express = require("express");
 const { localStrategy, jwtStrategy } = require("./middlewares/passports");

@@ -1,3 +1,5 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
 const express = require("express");
 const router = express.Router();
 const { register } = require("./controllers");
@@ -12,6 +14,10 @@ router.post("/register", register);
 
 router.post(
   "/login",
+  (req, res, next) => {
+    console.log("first");
+    next();
+  },
   passport.authenticate("local", { session: false }),
   login
 );
