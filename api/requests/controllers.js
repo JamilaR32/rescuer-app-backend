@@ -5,7 +5,7 @@ const Request = require("../../models/Request");
 const fetchRequest = async (request, response, next) => {
   try {
     const _id = request.params._id;
-    const newRequest = await Request.findById(_id);
+    const newRequest = await Request.findById(_id); // request name adjusted
     return response.status(200).json(newRequest);
   } catch (error) {
     next(error);
