@@ -11,3 +11,11 @@ const HelperSchema = new Schema({
 });
 
 module.exports = model("Helper", HelperSchema);
+
+//Geolocation reference
+//<field>: { type: <GeoJSON type> , coordinates: <coordinates> }
+//Geolocation reference
+//location: {
+//  type: "Point",
+//  coordinates: [-73.856077, 40.848447]
+//}

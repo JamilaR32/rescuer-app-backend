@@ -2,10 +2,19 @@
 
 const express = require("express");
 const router = express.Router();
-const { register } = require("./controllers");
-const { login } = require("./controllers");
-const { getMyProfile } = require("./controllers");
+const { register, login, getMyProfile, fetchUser } = require("./controllers");
 const passport = require("passport");
+
+router.param("userId", async (req, res, next, userId) => {
+  try {
+    const foundUser = await fetchUser(userId);
+    if (!foundUser) return next({ status: 404, message: "User not found" });
+    req.foundUser = foundUser;
+    next();
+  } catch (error) {
+    return next(error);
+  }
+});
 
 /// register
 router.post("/register", register);
@@ -14,10 +23,6 @@ router.post("/register", register);
 
 router.post(
   "/login",
-  (req, res, next) => {
-    console.log("first");
-    next();
-  },
   passport.authenticate("local", { session: false }),
   login
 );

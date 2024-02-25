@@ -55,6 +55,20 @@ const getAllRequests = async (req, res, next) => {
   }
 };
 
+// fetching a user to view the requests picked
+
+// const fetchUser = async (request, response, next) => {
+//   try {
+//     const _id = request.params._id;
+//     const newRequest = await Request.findById(_id); // request name adjusted
+//     return response.status(200).json(newRequest);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// fetching a user to view the requests picked
+
 module.exports = {
   getAllRequests,
   updateRequest,

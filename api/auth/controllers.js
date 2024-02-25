@@ -7,6 +7,15 @@ const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 require("dotenv").config();
 
+const fetchUser = async (userId, next) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    return next({ status: 400, message: error.message });
+  }
+};
+
 ////
 
 ///////hashPass
@@ -49,8 +58,6 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   // console.log("first");
   try {
-    console.log("2222");
-    console.log(req.user);
     const token = generateToken(req.user);
     return res.status(200).json({ token });
   } catch (err) {
@@ -59,11 +66,12 @@ const login = async (req, res, next) => {
 };
 const getMyProfile = async (req, res, next) => {
   try {
-    return res.status(200).json({ username: req.user.username });
+    const oldUser = await User.findById({ _id: req.user._id });
+    return res.status(200).json(oldUser);
   } catch (error) {
     next(error);
   }
 };
-module.exports = { register, login, getMyProfile };
+module.exports = { register, login, getMyProfile, fetchUser };
 
 ////
