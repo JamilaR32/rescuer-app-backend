@@ -5,6 +5,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
+const Request = require("../../models/Request");
 require("dotenv").config();
 
 const fetchUser = async (userId, next) => {
@@ -72,6 +73,44 @@ const getMyProfile = async (req, res, next) => {
     next(error);
   }
 };
-module.exports = { register, login, getMyProfile, fetchUser };
+// //
+// const updateRequest = async (req, res, next) => {
+//   const { _id } = req.params;
+//   try {
+//     await Request.findByIdAndUpdate(_id, req.body);
+//     res.status(204).end();
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+//
+//to assign the request choosen by the helper to the helper after checking if the user is a helper
+const assignRequest = async (req, res, next) => {
+  ///from params take id here
+  const request = req.body.requestId;
+  const helper = await User.findById(req.user._id.toString());
+  console.log(helper); // console.log(helper);
+  // console.log(req.user._id);
+  try {
+    const foundRequest = await Request.findById(request);
+    console.log(foundRequest);
+    if (!foundRequest) {
+      return;
+    }
+    // console.log(helper);
+    helper.requests.push(foundRequest);
+    await helper.save();
+
+    foundRequest.helper = req.user._id;
+    await foundRequest.save();
+    // const req = await User._id;
+    return res.json(foundRequest);
+  } catch (error) {
+    next(error);
+  }
+};
+//to assign the request choosen by the helper to the helper^^^^^^^^^^^^
+
+module.exports = { register, login, getMyProfile, fetchUser, assignRequest };
 
 ////
