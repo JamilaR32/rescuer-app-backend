@@ -1,3 +1,5 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
@@ -7,12 +9,11 @@ const { fromAuthHeaderAsBearerToken } = require("passport-jwt").ExtractJwt;
 
 const localStrategy = new LocalStrategy(
   {
-    usernameField: "username",
-    passwordField: "password",
+    usernameField: "civilId", //default name is username field it was civilid
   },
-  async (username, password, done) => {
+  async (civilId, password, done) => {
     try {
-      const user = await User.findOne({ username: username });
+      const user = await User.findOne({ civilId: civilId });
       if (!user) {
         return done({ message: "username or password is wrong!" });
       }
@@ -30,7 +31,7 @@ const localStrategy = new LocalStrategy(
 const jwtStrategy = new JWTStrategy(
   {
     jwtFromRequest: fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.SECRECT_KEY,
+    secretOrKey: process.env.SECRET_KEY,
   },
   async (payload, done) => {
     try {

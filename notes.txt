@@ -1,0 +1,20 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
+
+git pull //to get the latest repository
+git switch -c YourBranchName // 
+// you will be transfered to the new branch 
+//after working on the code 
+//to post your work
+git add .
+git commit -m "your comment"
+git push
+git push --set-upstream origin YourBranchName // we agree to name using our own and work
+//to post your work
+//in github
+
+//quick fix
+rm -rf node_modules/
+
+
+npm update

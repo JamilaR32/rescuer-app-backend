@@ -1,10 +1,12 @@
+//\\ بسم الله الرحمن الرحيم //\\
+
 const Request = require("../../src/models/Request");
 
 const fetchRequest = async (request, response, next) => {
   try {
     const _id = request.params._id;
-    const request = await Request.findById(_id);
-    return response.status(200).json(request);
+    const newRequest = await Request.findById(_id); // request name adjusted
+    return response.status(200).json(newRequest);
   } catch (error) {
     next(error);
   }
@@ -27,7 +29,7 @@ const deleteRequest = async (req, res, next) => {
   const { _id } = req.params;
   try {
     console.log(req.body);
-    await Request.findByIdAndRemove({ _id });
+    await Request.findByIdAndDelete({ _id }); //delete not remove however before deletion we should find a way to relocate
     res.status(204).end();
   } catch (error) {
     next(error);
@@ -52,6 +54,20 @@ const getAllRequests = async (req, res, next) => {
     next(error);
   }
 };
+
+// fetching a user to view the requests picked
+
+// const fetchUser = async (request, response, next) => {
+//   try {
+//     const _id = request.params._id;
+//     const newRequest = await Request.findById(_id); // request name adjusted
+//     return response.status(200).json(newRequest);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// fetching a user to view the requests picked
 
 const pastRequests = async (req, res, next) => {
   try {
