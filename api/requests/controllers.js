@@ -1,6 +1,6 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
-const Request = require("../../src/models/Request");
+const Request = require("../../models/Request");
 
 const fetchRequest = async (request, response, next) => {
   try {
