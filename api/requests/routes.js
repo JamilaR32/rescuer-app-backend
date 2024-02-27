@@ -7,6 +7,7 @@ const {
   fetchRequest,
   deleteRequest,
   updateRequest,
+  pastRequests,
 } = require("./controllers");
 const express = require("express");
 const { assignRequest } = require("../auth/controllers");
@@ -34,4 +35,5 @@ router.get("/requests/:_id", fetchRequest);
 //assign request to user
 //accepts current request id and user id
 //assign request to user^^^^^^^^^^^^^^^^^^^^^^
+router.get("/requests/history/close", pastRequests);
 module.exports = router;
