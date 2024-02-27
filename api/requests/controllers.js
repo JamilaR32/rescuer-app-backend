@@ -1,6 +1,6 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
-const Request = require("../../models/Request");
+const Request = require("../../src/models/Request");
 
 const fetchRequest = async (request, response, next) => {
   try {
@@ -69,10 +69,19 @@ const getAllRequests = async (req, res, next) => {
 
 // fetching a user to view the requests picked
 
+const pastRequests = async (req, res, next) => {
+  try {
+    const history = await Request.find({ status: "close" });
+    return res.status(201).json(history);
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getAllRequests,
   updateRequest,
   deleteRequest,
   createRequest,
   fetchRequest,
+  pastRequests,
 };
