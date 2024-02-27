@@ -6,6 +6,7 @@ const {
   fetchRequest,
   deleteRequest,
   updateRequest,
+  pastRequests,
 } = require("./controllers");
 const express = require("express");
 const router = express.Router();
@@ -20,5 +21,5 @@ router.put("/requests/:_id", updateRequest);
 router.delete("/requests/:_id", deleteRequest);
 
 router.get("/requests/:_id", fetchRequest);
-
+router.get("/requests/history/close", pastRequests);
 module.exports = router;
