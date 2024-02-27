@@ -11,6 +11,7 @@ const {
   findNearestRequest,
 } = require("./controllers");
 const passport = require("passport");
+//takes id from token
 const upload = require("../../middlewares/multer");
 
 router.param("userId", async (req, res, next, userId) => {
@@ -23,7 +24,7 @@ router.param("userId", async (req, res, next, userId) => {
     return next(error);
   }
 });
-
+//takes id from token^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 /// register
 router.post("/register", upload.single("image"), register);
 
@@ -50,5 +51,9 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   findNearestRequest
 );
+
+//assign user to request
+//accepts current user id and request id
+//assign user to request^^^^^^^^^^^^^^^^^^^^^^
 
 module.exports = router;

@@ -1,6 +1,7 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
 const Request = require("../../models/Request");
+const user = require("../../models/User");
 
 const fetchRequest = async (request, response, next) => {
   try {
@@ -11,19 +12,32 @@ const fetchRequest = async (request, response, next) => {
     next(error);
   }
 };
-
+//the created request should have an assigned user, and only a user can create a request
+// const createTweet = async (req, res, next) => {
+//   try {
+//     req.body.user = req.user._id;
+//     const tweet = await Tweet.create(req.body);
+//     return res.status(201).json(tweet);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+//
 const createRequest = async (req, res, next) => {
   try {
-    // req.body.user = req.user._id
+    req.body.user = req.user._id; //"message": "Cannot read properties of undefined (reading '_id')"
     if (req.file) {
       req.body.image = req.file.path;
     }
     const newRequest = await Request.create(req.body);
+    // newRequest = await Request.put(req.body.user=);
+    //assign the user that created the request to the request,here??
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);
   }
 };
+//the created request should have an assigned user, specificaly the current one^^^^^^^^^^^^
 
 const deleteRequest = async (req, res, next) => {
   const { _id } = req.params;
