@@ -52,6 +52,10 @@ const deleteRequest = async (req, res, next) => {
 };
 
 const updateRequest = async (req, res, next) => {
+  //if while updating the body of the request has status then set that new status in the request// work here closing status
+  // if (req.body.status) {
+  //   // await Request.findByIdAndUpdate(status,req.body)
+  // }
   const { _id } = req.params;
   try {
     await Request.findByIdAndUpdate(_id, req.body);

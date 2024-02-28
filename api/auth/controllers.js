@@ -134,25 +134,33 @@ const findNearestRequest = async (req, res, next) => {
 const assignRequest = async (req, res, next) => {
   ///from params take id here
   // const request = req.body.requestId;
-  const { requestId } = req.params;
+  const { _id } = req.params; //typo
   const helper = await User.findById(req.user._id);
   console.log(helper); // console.log(helper);
   // console.log(req.user._id);
   try {
-    const foundRequest = await Request.findById(requestId);
-    console.log(foundRequest);
+    const foundRequest = await Request.findById(_id); // typo
+    console.log("test", foundRequest);
     if (!foundRequest) {
       return res.status(404).json("REQUEST NOT FOUND!"); // checking if the request exists or not
     }
     if (foundRequest.helper) {
+      foundRequest.status = "ongoing";
       return res.status(401).json("REQUEST ALREADY HAS HELPER!"); // checking if the request has been taken by a helper fix fix fix
     }
+    if (!foundRequest.helper) {
+      foundRequest.status = "open";
+    }
 
+    //if request has helper >status ongoing>done
+    //if request does not have a helper >status open>done
+    //if request has helper that closed it >status closed, should this be in update
+    //
     //check if it exists>done
     //check if it has a helper>
     //check if its status is closed>
     //check its status?>
-    // console.log(helper);
+    //console.log(helper);
     helper.requests.push(foundRequest);
     await helper.save();
 
@@ -160,8 +168,8 @@ const assignRequest = async (req, res, next) => {
     await foundRequest.save();
     // const req = await User._id;
     return res.json(foundRequest);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
