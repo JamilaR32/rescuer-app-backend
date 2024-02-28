@@ -87,16 +87,25 @@ const getMyProfile = async (req, res, next) => {
 //to assign the request choosen by the helper to the helper after checking if the user is a helper
 const assignRequest = async (req, res, next) => {
   ///from params take id here
-  const request = req.body.requestId;
-  const helper = await User.findById(req.user._id.toString());
+  // const request = req.body.requestId;
+  const { requestId } = req.params;
+  const helper = await User.findById(req.user._id);
   console.log(helper); // console.log(helper);
   // console.log(req.user._id);
   try {
-    const foundRequest = await Request.findById(request);
+    const foundRequest = await Request.findById(requestId);
     console.log(foundRequest);
     if (!foundRequest) {
-      return;
+      return res.status(404).json("REQUEST NOT FOUND!"); // checking if the request exists or not
     }
+    if (foundRequest.helper) {
+      return res.status(401).json("REQUEST ALREADY HAS HELPER!"); // checking if the request has been taken by a helper fix fix fix
+    }
+
+    //check if it exists>done
+    //check if it has a helper>
+    //check if its status is closed>
+    //check its status?>
     // console.log(helper);
     helper.requests.push(foundRequest);
     await helper.save();

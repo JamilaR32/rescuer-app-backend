@@ -26,10 +26,12 @@ const fetchRequest = async (request, response, next) => {
 const createRequest = async (req, res, next) => {
   try {
     req.body.user = req.user._id; //"message": "Cannot read properties of undefined (reading '_id')"
+
     if (req.file) {
       req.body.image = req.file.path;
     }
     const newRequest = await Request.create(req.body);
+
     // newRequest = await Request.put(req.body.user=);
     //assign the user that created the request to the request,here??
     res.status(201).json(newRequest);
