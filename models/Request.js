@@ -10,6 +10,7 @@ const RequestSchema = new Schema({
     coordinates: [],
   },
   helper: { type: Schema.Types.ObjectId, ref: "Helper" },
+  status: { type: Boolean, default: false },
 });
 RequestSchema.index({ location: "2dsphere" });
 
