@@ -28,7 +28,7 @@ router.post(
 );
 
 router.get(
-  "/me",
+  "/user/profile",
   passport.authenticate("jwt", { session: false }),
   getMyProfile
 );
