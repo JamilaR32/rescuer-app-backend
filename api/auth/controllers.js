@@ -92,7 +92,6 @@ const getMyProfile = async (req, res, next) => {
 //     await Request.findByIdAndUpdate(_id, req.body);
 //     res.status(204).end();
 
-
 const findNearestRequest = async (req, res, next) => {
   //   const helper = await Helper.findOneAndUpdate({ user: userId });
 
@@ -161,6 +160,10 @@ const assignRequest = async (req, res, next) => {
     await foundRequest.save();
     // const req = await User._id;
     return res.json(foundRequest);
+  } catch (err) {
+    next(err);
+  }
+};
 
 const updateLocation = async (req, res, next) => {
   try {
@@ -185,16 +188,12 @@ const updateLocation = async (req, res, next) => {
 };
 //to assign the request choosen by the helper to the helper^^^^^^^^^^^^
 
-module.exports = { register, login, getMyProfile, fetchUser, assignRequest };
-
-
 module.exports = {
   register,
   login,
   getMyProfile,
   fetchUser,
   updateLocation,
+  assignRequest,
   findNearestRequest,
 };
-
-////
