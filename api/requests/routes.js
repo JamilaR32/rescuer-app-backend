@@ -42,4 +42,14 @@ router.put(
   //passport.authenticate("jwt", { session: false }),
   updateRequestLocation
 );
+//
+router.put(
+  "/requests/close/:_id",
+  passport.authenticate("jwt", { session: false }),
+  //
+  updateRequest
+  //
+);
+//
+
 module.exports = router;
