@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 const Helper = require("../../models/Helper");
 const { response } = require("express");
+const Request = require("../../models/Request");
+
 require("dotenv").config();
 
 const fetchUser = async (userId, next) => {
@@ -33,6 +35,7 @@ const generateToken = (user) => {
   const payLoad = {
     _id: user._id,
     username: user.username,
+    //location:
   };
   const token = jwt.sign(payLoad, process.env.SECRET_KEY, {
     expiresIn: "350d",
@@ -83,44 +86,37 @@ const getMyProfile = async (req, res, next) => {
 };
 
 const findNearestRequest = async (req, res, next) => {
-  //   const helper = await Helper.findOneAndUpdate({ user: userId });
-
   try {
-    Helper.find({
+    const results = await Request.find({
       location: {
-        $near: {
-          $maxDistance: 1000,
+        $nearSphere: {
           $geometry: {
             type: "Point",
-            coordinates: [long, latt],
+            coordinates: [-112.110492, -36.09894999997],
           },
+          $minDistance: 0,
+          $maxDistance: 100000, // Example: 100 kilometers
         },
       },
-    }).find((error, results) => {
-      if (error) console.log(error);
-      console.log(JSON.stringify(results, 0, 2));
     });
+
+    // Process results here
+    return res.json(results); // Send results to the client
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+const getHelperById = async (req, res, next) => {
+  try {
+    const helper = await Helper.findById(req.params._id);
+    res.status(200).json(helper);
   } catch (error) {
     next(error);
   }
 };
-// const updateLocation = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const helper = await Helper.findOne({ user: user._id });
-//     if (!helper) {
-//       return res.status(404).send("Helper not found");
-//     }
-//     await helper.updateOne({
-//       location: { ...helper.location, coordinates: req.body.coordinates },
-//     });
-//     return res.status(204).end;
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-const updateLocation = async (req, res, next) => {
+const updateHelperLocation = async (req, res, next) => {
   try {
     const userId = req.user._id;
 
@@ -132,6 +128,7 @@ const updateLocation = async (req, res, next) => {
     if (!helper) {
       return res.status(404).send("Helper not found");
     }
+    console.log(helper);
     await helper.updateOne({
       location: { type: "Point", coordinates: req.body.coordinates },
     });
@@ -147,8 +144,9 @@ module.exports = {
   login,
   getMyProfile,
   fetchUser,
-  updateLocation,
   findNearestRequest,
+  getHelperById,
+  updateHelperLocation,
 };
 
 ////

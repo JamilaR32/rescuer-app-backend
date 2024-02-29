@@ -7,8 +7,9 @@ const {
   login,
   getMyProfile,
   fetchUser,
-  updateLocation,
   findNearestRequest,
+  getHelperById,
+  updateHelperLocation,
 } = require("./controllers");
 const passport = require("passport");
 const upload = require("../../middlewares/multer");
@@ -43,12 +44,17 @@ router.get(
 router.put(
   "/updateLocation",
   passport.authenticate("jwt", { session: false }),
-  updateLocation
+  updateHelperLocation
 );
 router.get(
   "/nearestRequest",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   findNearestRequest
+);
+router.get(
+  "/helper/:_id",
+
+  getHelperById
 );
 
 module.exports = router;

@@ -8,8 +8,15 @@ const HelperSchema = new Schema({
   plateNumber: { type: String, required: true },
   user: { type: Schema.Types.ObjectId, ref: "User" },
   location: {
-    type: { type: String },
-    coordinates: [],
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ["Point"], // 'location.type' must be 'Point'
+      // required: true,
+    },
+    coordinates: {
+      type: [Number],
+      // required: true,
+    },
   },
   requests: [{ type: Schema.Types.ObjectId, ref: "Request" }],
 });
