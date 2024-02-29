@@ -7,9 +7,10 @@ const {
   login,
   getMyProfile,
   fetchUser,
-  findNearestRequest,
+  // findNearestRequest,
   getHelperById,
   updateHelperLocation,
+  findNearestRequestForHelper,
 } = require("./controllers");
 const passport = require("passport");
 //takes id from token
@@ -43,17 +44,17 @@ router.get(
   getMyProfile
 );
 router.put(
-  "/updateLocation",
+  "/updateHelperLocation",
   passport.authenticate("jwt", { session: false }),
   updateHelperLocation
 );
 router.get(
   "/nearestRequest",
-  //passport.authenticate("jwt", { session: false }),
-  findNearestRequest
+  passport.authenticate("jwt", { session: false }),
+  findNearestRequestForHelper
 );
 router.get(
-  "/helper/:_id",
+  "/helper",
 
   getHelperById
 );
