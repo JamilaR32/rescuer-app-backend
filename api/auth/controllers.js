@@ -102,7 +102,8 @@ const findNearestRequestForHelper = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(helperId)) {
       return res.status(400).json({ message: "Invalid helper ID" });
     }
-
+    const helperloc = req.user.helper;
+    console.log(helperloc);
     // Proceed with finding the helper
     const { helper } = await User.findById(helperId).populate("helper");
     console.log("Helper:", helper);
