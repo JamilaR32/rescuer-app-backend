@@ -73,6 +73,28 @@ const getAllRequests = async (req, res, next) => {
     next(error);
   }
 };
+const updateRequestLocation = async (req, res, next) => {
+  try {
+    const requestId = req.params._id;
+
+    //const userId = req.body.userId; // Assuming the client sends userId directly
+    if (!requestId) {
+      return res.status(400).send("User ID is required");
+    }
+    const request = await Request.findOneAndUpdate({ user: requestId });
+    if (!request) {
+      return res.status(404).send("Helper not found");
+    }
+    // console.log(helper);
+    await request.updateOne({
+      location: { type: "Point", coordinates: req.body.coordinates },
+    });
+    console.log(request);
+    return res.status(204).end(); // Make sure to call end() as a function
+  } catch (error) {
+    next(error);
+  }
+};
 
 // fetching a user to view the requests picked
 
@@ -103,4 +125,5 @@ module.exports = {
   createRequest,
   fetchRequest,
   pastRequests,
+  updateRequestLocation,
 };

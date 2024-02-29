@@ -8,6 +8,7 @@ const {
   deleteRequest,
   updateRequest,
   pastRequests,
+  updateRequestLocation,
 } = require("./controllers");
 const express = require("express");
 const { assignRequest } = require("../auth/controllers");
@@ -36,4 +37,9 @@ router.get("/requests/:_id", fetchRequest);
 //accepts current request id and user id
 //assign request to user^^^^^^^^^^^^^^^^^^^^^^
 router.get("/requests/history/close", pastRequests);
+router.put(
+  "/updateRequestLocation/:_id",
+  //passport.authenticate("jwt", { session: false }),
+  updateRequestLocation
+);
 module.exports = router;
