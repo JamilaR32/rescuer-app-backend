@@ -68,7 +68,7 @@ const register = async (req, res, next) => {
   }
 };
 
-///sign-in
+///sign-in-
 const login = async (req, res, next) => {
   // console.log("first");
   try {
@@ -166,20 +166,28 @@ const updateHelperLocation = async (req, res, next) => {
 const assignRequest = async (req, res, next) => {
   ///from params take id here
   // const request = req.body.requestId;
+  console.log("start assign");
   const { _id } = req.params; //typo
   const helper = await User.findById(req.user._id);
   console.log(helper); // console.log(helper);
   // console.log(req.user._id);
   try {
+    console.log("hello ahmad");
     const foundRequest = await Request.findById(_id); // typo
     console.log("test", foundRequest);
     if (!foundRequest) {
       return res.status(404).json("REQUEST NOT FOUND!"); // checking if the request exists or not
     }
+    console.log("helper", foundRequest.helper);
     if (foundRequest.helper) {
-      foundRequest.status = "ongoing";
       return res.status(401).json("REQUEST ALREADY HAS HELPER!"); // checking if the request has been taken by a helper fix fix fix
+    } else {
+      foundRequest.helper = req.user._id;
+
+      foundRequest.status = "ongoing";
+      await foundRequest.save();
     }
+
     if (!foundRequest.helper) {
       foundRequest.status = "open";
     }
@@ -196,7 +204,6 @@ const assignRequest = async (req, res, next) => {
     helper.requests.push(foundRequest);
     await helper.save();
 
-    foundRequest.helper = req.user._id;
     await foundRequest.save();
     // const req = await User._id;
     return res.json(foundRequest);
