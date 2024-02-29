@@ -5,9 +5,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-
 const Request = require("../../models/Request");
-
 const Helper = require("../../models/Helper");
 const { response } = require("express");
 const { default: mongoose } = require("mongoose");
@@ -139,29 +137,6 @@ const findNearestRequestForHelper = async (req, res, next) => {
   }
 };
 
-// const findNearestRequest = async (req, res, next) => {
-//   try {
-//     const results = await Request.find({
-//       location: {
-//         $nearSphere: {
-//           $geometry: {
-//             type: "Point",
-//             coordinates: [-112.110492, -36.09894999997],
-//           },
-//           $minDistance: 0,
-//           $maxDistance: 100000, // Example: 100 kilometers
-//         },
-//       },
-//     });
-
-//     // Process results here
-//     return res.json(results); // Send results to the client
-//   } catch (error) {
-//     console.error(error);
-//     next(error);
-//   }
-// };
-
 const getHelperById = async (req, res, next) => {
   try {
     const helper = await Helper.findById(req.params._id);
@@ -193,22 +168,7 @@ const updateHelperLocation = async (req, res, next) => {
     next(error);
   }
 };
-// const updateLocation = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const helper = await Helper.findOne({ user: user._id });
-//     if (!helper) {
-//       return res.status(404).send("Helper not found");
-//     }
-//     await helper.updateOne({
-//       location: { ...helper.location, coordinates: req.body.coordinates },
-//     });
-//     return res.status(204).end;
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-//
+
 //to assign the request choosen by the helper to the helper after checking if the user is a helper
 const assignRequest = async (req, res, next) => {
   ///from params take id here
