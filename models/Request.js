@@ -15,7 +15,7 @@ const RequestSchema = new Schema({
     },
   },
   helper: { type: Schema.Types.ObjectId, ref: "Helper" },
-  status: { type: String, enum: ["close", "open"] },
+  status: { type: String, enum: ["close", "open", "ongoing"], default: "open" },
 });
 RequestSchema.index({ location: "2dsphere" });
 

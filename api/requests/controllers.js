@@ -56,10 +56,18 @@ const updateRequest = async (req, res, next) => {
   // if (req.body.status) {
   //   // await Request.findByIdAndUpdate(status,req.body)
   // }
-  const { _id } = req.params;
+  const { _id } = req.params; //og
+  //
+
   try {
-    await Request.findByIdAndUpdate(_id, req.body);
-    res.status(204).end();
+    const foundRequest = await Request.findById(_id); // typo // error here
+    foundRequest.status = "close";
+    await foundRequest.save();
+
+    // await Request.findByIdAndUpdate(_id, req.body); //tryed foundRequest
+    // return res.json(foundRequest);
+    return res.status(200).json(foundRequest); //trying to return the request //workin here 204?? got it!
+    // res.status(204).end();
   } catch (error) {
     next(error);
   }
