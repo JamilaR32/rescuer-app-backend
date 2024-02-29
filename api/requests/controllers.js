@@ -11,19 +11,34 @@ const fetchRequest = async (request, response, next) => {
     next(error);
   }
 };
-
+//the created request should have an assigned user, and only a user can create a request
+// const createTweet = async (req, res, next) => {
+//   try {
+//     req.body.user = req.user._id;
+//     const tweet = await Tweet.create(req.body);
+//     return res.status(201).json(tweet);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+//
 const createRequest = async (req, res, next) => {
   try {
-    // req.body.user = req.user._id
+    req.body.user = req.user._id; //"message": "Cannot read properties of undefined (reading '_id')"
+
     if (req.file) {
       req.body.image = req.file.path;
     }
     const newRequest = await Request.create(req.body);
+
+    // newRequest = await Request.put(req.body.user=);
+    //assign the user that created the request to the request,here??
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);
   }
 };
+//the created request should have an assigned user, specificaly the current one^^^^^^^^^^^^
 
 const deleteRequest = async (req, res, next) => {
   const { _id } = req.params;
@@ -37,6 +52,10 @@ const deleteRequest = async (req, res, next) => {
 };
 
 const updateRequest = async (req, res, next) => {
+  //if while updating the body of the request has status then set that new status in the request// work here closing status
+  // if (req.body.status) {
+  //   // await Request.findByIdAndUpdate(status,req.body)
+  // }
   const { _id } = req.params;
   try {
     await Request.findByIdAndUpdate(_id, req.body);

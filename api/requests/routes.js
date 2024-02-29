@@ -11,18 +11,31 @@ const {
   updateRequestLocation,
 } = require("./controllers");
 const express = require("express");
+const { assignRequest } = require("../auth/controllers");
 const router = express.Router();
 
 router.get("/requests", getAllRequests);
 
 // TOKEN JWT
-router.post("/requests", createRequest);
+router.post(
+  "/requests",
+  passport.authenticate("jwt", { session: false }),
+  createRequest
+);
 
-router.put("/requests/:_id", updateRequest);
+router.put(
+  "/requests/:_id",
+  passport.authenticate("jwt", { session: false }),
+  assignRequest
+);
 
 router.delete("/requests/:_id", deleteRequest);
 
 router.get("/requests/:_id", fetchRequest);
+
+//assign request to user
+//accepts current request id and user id
+//assign request to user^^^^^^^^^^^^^^^^^^^^^^
 router.get("/requests/history/close", pastRequests);
 router.put(
   "/updateRequestLocation/:_id",

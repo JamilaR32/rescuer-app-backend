@@ -1,5 +1,3 @@
-//\\ بسم الله الرحمن الرحيم //\\
-
 const { model, Schema } = require("mongoose");
 
 const RequestSchema = new Schema({
@@ -22,11 +20,3 @@ const RequestSchema = new Schema({
 RequestSchema.index({ location: "2dsphere" });
 
 module.exports = model("Request", RequestSchema);
-
-//Geolocation reference
-//<field>: { type: <GeoJSON type> , coordinates: <coordinates> }
-//Geolocation reference
-//location: {
-//  type: "Point",
-//  coordinates: [-73.856077, 40.848447]
-//}
