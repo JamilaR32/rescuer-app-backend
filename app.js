@@ -31,7 +31,7 @@ app.use(errorHandler);
 
 /// connect to DB
 connectDB();
-const PORT = 8000;
+const PORT = 8080;
 app.listen(PORT, () => {
   console.log(`RUNNING ON PORT ${PORT}`);
 });

@@ -9,6 +9,7 @@ const {
   updateRequest,
   pastRequests,
   updateRequestLocation,
+  reupdateRequest,
 } = require("./controllers");
 const express = require("express");
 const { assignRequest } = require("../auth/controllers");
@@ -51,5 +52,13 @@ router.put(
   //
 );
 //
+
+router.put(
+  "/requests/open/:_id",
+  passport.authenticate("jwt", { session: false }),
+  //
+  reupdateRequest //this will set request status to open incase the helper doesn't fullfill assistance
+  //
+);
 
 module.exports = router;

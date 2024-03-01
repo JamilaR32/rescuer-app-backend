@@ -73,6 +73,30 @@ const updateRequest = async (req, res, next) => {
   }
 };
 
+//
+//reupdateRequest friday work
+
+const reupdateRequest = async (req, res, next) => {
+  //if while updating the body of the request has status then set that new status in the request// work here closing status
+  // if (req.body.status) {
+  //   // await Request.findByIdAndUpdate(status,req.body)
+  // }
+  const { _id } = req.params; //og
+  //
+
+  try {
+    const foundRequest = await Request.findById(_id); // typo // error here
+    foundRequest.status = "open";
+    //here i need to clear the helper, in other words make it undefined
+    await foundRequest.save();
+
+    return res.status(200).json(foundRequest);
+  } catch (error) {
+    next(error);
+  }
+};
+//reupdateRequest friday work
+
 const getAllRequests = async (req, res, next) => {
   try {
     const requests = await Request.find();
@@ -134,4 +158,5 @@ module.exports = {
   fetchRequest,
   pastRequests,
   updateRequestLocation,
+  reupdateRequest,
 };
