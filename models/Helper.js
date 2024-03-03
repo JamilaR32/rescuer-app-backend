@@ -4,18 +4,19 @@ const { model, Schema } = require("mongoose");
 
 const HelperSchema = new Schema({
   image: { type: String, required: true },
-  skills: [{ type: Schema.Types.ObjectId, ref: "Skill" }],
+  skills: [String],
   plateNumber: { type: String, required: true },
   user: { type: Schema.Types.ObjectId, ref: "User" },
   location: {
     type: {
       type: String, // Don't do `{ location: { type: String } }`
       enum: ["Point"], // 'location.type' must be 'Point'
-      required: true,
+
+      required: false,
     },
     coordinates: {
       type: [Number],
-      required: true,
+      required: false,
     },
   },
   requests: [{ type: Schema.Types.ObjectId, ref: "Request" }],

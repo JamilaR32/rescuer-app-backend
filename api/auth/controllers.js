@@ -35,10 +35,10 @@ const hashPassword = async (password) => {
 const generateToken = (user) => {
   const payLoad = {
     _id: user._id,
-    username: user.username,
-    //location:
+    fullName: user.fullName,
+    helper: user.helper ?? false,
   };
-  const token = jwt.sign(payLoad, process.env.SECRECT_KEY, {
+  const token = jwt.sign(payLoad, process.env.SECRET_KEY, {
     expiresIn: "350d",
   });
   return token;
@@ -48,15 +48,17 @@ const generateToken = (user) => {
 
 const register = async (req, res, next) => {
   try {
+    console.log(req.body);
     const password = req.body.password;
     const hashedPassword = await hashPassword(password);
     req.body.password = hashedPassword;
-    const newUser = await User.create(req.body); // user
+    let newUser = await User.create(req.body); // user
     if (req.file) {
       req.body.image = req.file.path;
       req.body.user = newUser._id;
       const helper = await Helper.create(req.body);
       await newUser.updateOne({ helper: helper });
+      newUser = await User.findById(newUser._id).populate("helper");
     }
 
     const token = generateToken(newUser);
@@ -271,10 +273,10 @@ module.exports = {
   fetchUser,
   updateLocation,
   assignRequest,
-  findNearestRequest,
+  // findNearestRequest,
   editProfile,
   getAllUsers,
-  //findNearestRequest,
+  // findNearestRequest,
   findNearestRequestForHelper,
   getHelperById,
   updateHelperLocation,
