@@ -7,6 +7,10 @@ const {
   login,
   getMyProfile,
   fetchUser,
+  updateLocation,
+  findNearestRequest,
+  editProfile,
+  getAllUsers,
   // findNearestRequest,
   getHelperById,
   updateHelperLocation,
@@ -59,6 +63,12 @@ router.get(
   getHelperById
 );
 
+router.put(
+  "/profile/",
+  passport.authenticate("jwt", { session: false }),
+  editProfile
+);
+router.get("/users", getAllUsers);
 //assign user to request
 //accepts current user id and request id
 //assign user to request^^^^^^^^^^^^^^^^^^^^^^
