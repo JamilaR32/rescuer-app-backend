@@ -38,7 +38,7 @@ const generateToken = (user) => {
     _id: user._id,
     username: user.username,
   };
-  const token = jwt.sign(payLoad, process.env.SECRET_KEY, {
+  const token = jwt.sign(payLoad, process.env.SECRECT_KEY, {
     expiresIn: "350d",
   });
   return token;
@@ -80,7 +80,20 @@ const login = async (req, res, next) => {
 const getMyProfile = async (req, res, next) => {
   try {
     const oldUser = await User.findById({ _id: req.user._id });
+
     return res.status(200).json(oldUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const editProfile = async (req, res, next) => {
+  try {
+    if (req.body.password) {
+      req.body.password = await hashPassword(req.body.password);
+    }
+    const user = await User.findByIdAndUpdate(req.user._id, req.body);
+    res.status(204).json(user);
   } catch (error) {
     next(error);
   }
@@ -187,7 +200,14 @@ const updateLocation = async (req, res, next) => {
   }
 };
 //to assign the request choosen by the helper to the helper^^^^^^^^^^^^
-
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   register,
   login,
@@ -196,4 +216,6 @@ module.exports = {
   updateLocation,
   assignRequest,
   findNearestRequest,
+  editProfile,
+  getAllUsers,
 };

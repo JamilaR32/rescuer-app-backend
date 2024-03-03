@@ -10,9 +10,11 @@ const { fromAuthHeaderAsBearerToken } = require("passport-jwt").ExtractJwt;
 const localStrategy = new LocalStrategy(
   {
     usernameField: "civilId", //default name is username field it was civilid
+    passwordField: "password",
   },
   async (civilId, password, done) => {
     try {
+      console.log("calling passport");
       const user = await User.findOne({ civilId: civilId });
       if (!user) {
         return done({ message: "username or password is wrong!" });
