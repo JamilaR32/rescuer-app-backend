@@ -8,6 +8,8 @@ const {
   deleteRequest,
   updateRequest,
   pastRequests,
+  updateRequestLocation,
+  reupdateRequest,
 } = require("./controllers");
 const express = require("express");
 const { assignRequest } = require("../auth/controllers");
@@ -36,4 +38,27 @@ router.get("/requests/:_id", fetchRequest);
 //accepts current request id and user id
 //assign request to user^^^^^^^^^^^^^^^^^^^^^^
 router.get("/requests/history/close", pastRequests);
+router.put(
+  "/updateRequestLocation/:_id",
+  //passport.authenticate("jwt", { session: false }),
+  updateRequestLocation
+);
+//
+router.put(
+  "/requests/close/:_id",
+  passport.authenticate("jwt", { session: false }),
+  //
+  updateRequest
+  //
+);
+//
+
+router.put(
+  "/requests/open/:_id",
+  passport.authenticate("jwt", { session: false }),
+  //
+  reupdateRequest //this will set request status to open incase the helper doesn't fullfill assistance
+  //
+);
+
 module.exports = router;

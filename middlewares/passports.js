@@ -33,7 +33,7 @@ const localStrategy = new LocalStrategy(
 const jwtStrategy = new JWTStrategy(
   {
     jwtFromRequest: fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.SECRECT_KEY,
+    secretOrKey: process.env.SECRET_KEY, //typo
   },
   async (payload, done) => {
     try {
