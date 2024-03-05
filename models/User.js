@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   phoneNumber: { type: String, required: false },
   requests: [{ type: Schema.Types.ObjectId, ref: "Request" }],
   helper: { type: Schema.Types.ObjectId, ref: "Helper" },
+  token: String,
 });
 
 module.exports = model("User", UserSchema);

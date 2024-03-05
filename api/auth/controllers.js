@@ -9,6 +9,7 @@ const Request = require("../../models/Request");
 const Helper = require("../../models/Helper");
 const { response } = require("express");
 const { default: mongoose } = require("mongoose");
+const { sendNotification } = require("../../utils/sendNotifications");
 
 require("dotenv").config();
 
@@ -79,7 +80,9 @@ const login = async (req, res, next) => {
 };
 const getMyProfile = async (req, res, next) => {
   try {
-    const oldUser = await User.findById({ _id: req.user._id });
+    const oldUser = await User.findById({ _id: req.user._id }).populate(
+      "helper"
+    );
 
     return res.status(200).json(oldUser);
   } catch (error) {
@@ -229,6 +232,16 @@ const assignRequest = async (req, res, next) => {
 
     helper.requests.push(foundRequest);
     await helper.save();
+
+    // send notification user, there is helper coming to you
+
+    const user = await User.findById(foundRequest.user);
+    // req.user this is the helper ali
+    await sendNotification(
+      [user],
+      `${req.user.fullName} is coming to help`,
+      "Accpeted"
+    );
 
     return res.json(foundRequest);
   } catch (error) {

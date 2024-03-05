@@ -1,6 +1,8 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
 const Request = require("../../models/Request");
+const User = require("../../models/User");
+const { sendNotification } = require("../../utils/sendNotifications");
 
 const fetchRequest = async (request, response, next) => {
   try {
@@ -47,6 +49,11 @@ const createRequest = async (req, res, next) => {
     // await req.user.updateOne({
     //   requests: { $push: newRequest._id },
     // });
+
+    // send to all helpers, that there is a user needs help
+    // const users = await User.find({ helper: { $ne: null } });
+    // sendNotification(users, "There is a user needing help", "COME HELP");
+
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);
