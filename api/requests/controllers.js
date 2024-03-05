@@ -22,17 +22,31 @@ const fetchRequest = async (request, response, next) => {
 //   }
 // };
 //
+const getIfIHaveRequest = async (req, res, next) => {
+  try {
+    // find one req from me that is open
+
+    const request = await Request.findOne({
+      user: req.user._id,
+      status: { $ne: "closed" }, // $ne operator selects the documents where the value of the status field is not equal to "closed"
+    }).populate("helper");
+
+    return res.status(200).json(request);
+  } catch (error) {
+    next(error);
+  }
+};
 const createRequest = async (req, res, next) => {
   try {
     req.body.user = req.user._id; //"message": "Cannot read properties of undefined (reading '_id')"
 
-    if (req.file) {
-      req.body.image = req.file.path;
-    }
     const newRequest = await Request.create(req.body);
 
-    // newRequest = await Request.put(req.body.user=);
-    //assign the user that created the request to the request,here??
+    req.user.requests.push(newRequest._id);
+    await req.user.save();
+    // await req.user.updateOne({
+    //   requests: { $push: newRequest._id },
+    // });
     res.status(201).json(newRequest);
   } catch (error) {
     next(error);
@@ -100,7 +114,7 @@ const reupdateRequest = async (req, res, next) => {
 const getAllRequests = async (req, res, next) => {
   try {
     const requests = await Request.find();
-    res.json(requests);
+    return res.status(200).json(requests);
   } catch (error) {
     next(error);
   }
@@ -149,4 +163,5 @@ module.exports = {
   pastRequests,
   updateRequestLocation,
   reupdateRequest,
+  getIfIHaveRequest,
 };

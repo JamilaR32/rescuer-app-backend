@@ -10,6 +10,9 @@ const {
   pastRequests,
   updateRequestLocation,
   reupdateRequest,
+
+  getIfIHaveRequest,
+  // getIfIHaveRequest,
 } = require("./controllers");
 const express = require("express");
 const { assignRequest } = require("../auth/controllers");
@@ -22,6 +25,11 @@ router.post(
   "/requests",
   passport.authenticate("jwt", { session: false }),
   createRequest
+);
+router.get(
+  "/requests/getIfIHaveRequest",
+  passport.authenticate("jwt", { session: false }),
+  getIfIHaveRequest
 );
 
 router.put(
@@ -43,6 +51,7 @@ router.put(
   //passport.authenticate("jwt", { session: false }),
   updateRequestLocation
 );
+
 //
 router.put(
   "/requests/close/:_id",

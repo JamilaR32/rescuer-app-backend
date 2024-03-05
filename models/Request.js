@@ -3,7 +3,7 @@ const { model, Schema } = require("mongoose");
 const RequestSchema = new Schema(
   {
     case: { type: String, required: true },
-    user: [{ type: Schema.Types.ObjectId, ref: "Skill" }],
+    user: { type: Schema.Types.ObjectId, ref: "User" },
     location: {
       type: {
         type: String, // Don't do `{ location: { type: String } }`

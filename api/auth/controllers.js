@@ -48,7 +48,6 @@ const generateToken = (user) => {
 
 const register = async (req, res, next) => {
   try {
-    console.log(req.body);
     const password = req.body.password;
     const hashedPassword = await hashPassword(password);
     req.body.password = hashedPassword;
@@ -71,7 +70,6 @@ const register = async (req, res, next) => {
 
 ///sign-in-
 const login = async (req, res, next) => {
-  // console.log("first");
   try {
     const token = generateToken(req.user);
     return res.status(200).json({ token });
@@ -111,17 +109,15 @@ const findNearestRequestForHelper = async (req, res, next) => {
   try {
     // Directly access helperId without using await
     const helperId = req.user._id;
-    console.log("Helper ID:", helperId);
 
     // Validate helperId before proceeding
     if (!mongoose.Types.ObjectId.isValid(helperId)) {
       return res.status(400).json({ message: "Invalid helper ID" });
     }
     const helperloc = req.user.helper;
-    console.log(helperloc);
+
     // Proceed with finding the helper
     const { helper } = await User.findById(helperId).populate("helper");
-    console.log("Helper:", helper);
 
     if (!helper) {
       return res.status(404).json({ message: "Helper not found" });
@@ -174,11 +170,11 @@ const updateHelperLocation = async (req, res, next) => {
     if (!helper) {
       return res.status(404).send("Helper not found");
     }
-    console.log(helper);
+
     await helper.updateOne({
       location: { type: "Point", coordinates: req.body.coordinates },
     });
-    console.log(helper);
+
     return res.status(204).end(); // Make sure to call end() as a function
   } catch (error) {
     next(error);
@@ -189,23 +185,30 @@ const updateHelperLocation = async (req, res, next) => {
 const assignRequest = async (req, res, next) => {
   ///from params take id here
   // const request = req.body.requestId;
-  console.log("start assign");
+
   const { _id } = req.params; //typo
+  const theHelper = await Helper.findOneAndUpdate(
+    { user: req.user._id },
+    {
+      location: {
+        type: "Point",
+        coordinates: [req.body.lon, req.body.lat],
+      },
+    }
+  );
   const helper = await User.findById(req.user._id);
-  console.log(helper); // console.log(helper);
-  // console.log(req.user._id);
+
   try {
-    console.log("hello ahmad");
     const foundRequest = await Request.findById(_id); // typo
-    console.log("test", foundRequest);
+
     if (!foundRequest) {
       return res.status(404).json("REQUEST NOT FOUND!"); // checking if the request exists or not
     }
-    console.log("helper", foundRequest.helper);
+
     if (foundRequest.helper) {
       return res.status(401).json("REQUEST ALREADY HAS HELPER!"); // checking if the request has been taken by a helper fix fix fix
     } else {
-      foundRequest.helper = req.user._id;
+      foundRequest.helper = helper.helper;
 
       foundRequest.status = "ongoing";
       await foundRequest.save();
@@ -223,12 +226,10 @@ const assignRequest = async (req, res, next) => {
     //check if it has a helper>
     //check if its status is closed>
     //check its status?>
-    //console.log(helper);
+
     helper.requests.push(foundRequest);
     await helper.save();
 
-    await foundRequest.save();
-    // const req = await User._id;
     return res.json(foundRequest);
   } catch (error) {
     next(error);
@@ -247,11 +248,11 @@ const updateLocation = async (req, res, next) => {
     if (!helper) {
       return res.status(404).send("Helper not found");
     }
-    console.log(helper);
+
     await helper.updateOne({
       location: { type: "Point", coordinates: req.body.coordinates },
     });
-    console.log(helper);
+
     return res.status(204).end(); // Make sure to call end() as a function
   } catch (error) {
     next(error);
