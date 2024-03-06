@@ -79,7 +79,9 @@ const login = async (req, res, next) => {
 };
 const getMyProfile = async (req, res, next) => {
   try {
-    const oldUser = await User.findById({ _id: req.user._id });
+    const oldUser = await User.findById({ _id: req.user._id }).populate(
+      "helper"
+    );
 
     return res.status(200).json(oldUser);
   } catch (error) {

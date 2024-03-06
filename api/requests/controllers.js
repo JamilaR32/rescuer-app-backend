@@ -1,5 +1,6 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
+const Helper = require("../../models/Helper");
 const Request = require("../../models/Request");
 
 const fetchRequest = async (request, response, next) => {
@@ -28,7 +29,7 @@ const getIfIHaveRequest = async (req, res, next) => {
 
     const request = await Request.findOne({
       user: req.user._id,
-      status: { $ne: "closed" }, // $ne operator selects the documents where the value of the status field is not equal to "closed"
+      status: { $ne: "close" }, // $ne operator selects the documents where the value of the status field is not equal to "closed"
     }).populate("helper");
 
     return res.status(200).json(request);
@@ -142,9 +143,25 @@ const updateRequestLocation = async (req, res, next) => {
   }
 };
 
-// fetching a user to view the requests picked
+const getUserDetailsByHelperId = async (req, res) => {
+  try {
+    const helperId = req.params._id;
 
-// fetching a user to view the requests picked
+    const helper = await Helper.findById(helperId).populate("user").exec();
+    console.log(helper);
+    if (!helper) {
+      return res.status(404).send({ message: "Helper not found." });
+    }
+
+    // Assuming 'user' is populated, send back the user details
+    res.status(200).send(helper.user);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Server error while fetching user details." });
+  }
+};
 
 const pastRequests = async (req, res, next) => {
   try {
@@ -164,4 +181,5 @@ module.exports = {
   updateRequestLocation,
   reupdateRequest,
   getIfIHaveRequest,
+  getUserDetailsByHelperId,
 };
