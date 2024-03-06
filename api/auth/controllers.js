@@ -9,6 +9,7 @@ const Request = require("../../models/Request");
 const Helper = require("../../models/Helper");
 const { response } = require("express");
 const { default: mongoose } = require("mongoose");
+const { sendNotification } = require("../../utils/sendNotifications");
 
 require("dotenv").config();
 
@@ -231,6 +232,16 @@ const assignRequest = async (req, res, next) => {
 
     helper.requests.push(foundRequest);
     await helper.save();
+
+    // send notification user, there is helper coming to you
+
+    const user = await User.findById(foundRequest.user);
+    // req.user this is the helper ali
+    await sendNotification(
+      [user],
+      `${req.user.fullName} is coming to help`,
+      "Accpeted"
+    );
 
     return res.json(foundRequest);
   } catch (error) {
