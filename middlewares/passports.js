@@ -44,7 +44,7 @@ const jwtStrategy = new JWTStrategy(
       if (Date.now() / 1000 > payload.exp) {
         return done({ message: "Token expired!" });
       }
-      return done(null, user);
+      return done(null, user); //req.user = user
     } catch (error) {
       done(error);
     }
