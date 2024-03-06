@@ -1,5 +1,6 @@
 //\\ بسم الله الرحمن الرحيم //\\
 
+const Helper = require("../../models/Helper");
 const Request = require("../../models/Request");
 const User = require("../../models/User");
 const { sendNotification } = require("../../utils/sendNotifications");
@@ -30,8 +31,15 @@ const getIfIHaveRequest = async (req, res, next) => {
 
     const request = await Request.findOne({
       user: req.user._id,
-      status: { $ne: "closed" }, // $ne operator selects the documents where the value of the status field is not equal to "closed"
-    }).populate("helper");
+      status: { $ne: "close" }, // $ne operator selects the documents where the value of the status field is not equal to "closed"
+    })
+      .populate({
+        path: "helper",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate("user");
 
     return res.status(200).json(request);
   } catch (error) {
@@ -108,6 +116,7 @@ const reupdateRequest = async (req, res, next) => {
   try {
     const foundRequest = await Request.findById(_id); // typo // error here
     foundRequest.status = "open";
+    foundRequest.helper = null;
     //here i need to clear the helper, in other words make it undefined
     await foundRequest.save();
 
@@ -120,7 +129,14 @@ const reupdateRequest = async (req, res, next) => {
 
 const getAllRequests = async (req, res, next) => {
   try {
-    const requests = await Request.find();
+    const requests = await Request.find()
+      .populate({
+        path: "helper",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate("user");
     return res.status(200).json(requests);
   } catch (error) {
     next(error);
@@ -149,13 +165,36 @@ const updateRequestLocation = async (req, res, next) => {
   }
 };
 
-// fetching a user to view the requests picked
+const getUserDetailsByHelperId = async (req, res) => {
+  try {
+    const helperId = req.params._id;
 
-// fetching a user to view the requests picked
+    const helper = await Helper.findById(helperId).populate("user").exec();
+    console.log(helper);
+    if (!helper) {
+      return res.status(404).send({ message: "Helper not found." });
+    }
+
+    // Assuming 'user' is populated, send back the user details
+    res.status(200).send(helper.user);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Server error while fetching user details." });
+  }
+};
 
 const pastRequests = async (req, res, next) => {
   try {
-    const history = await Request.find({ status: "close" });
+    const history = await Request.find({ status: "close" })
+      .populate({
+        path: "helper",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate("user");
     return res.status(201).json(history);
   } catch (error) {
     next(error);
@@ -171,4 +210,5 @@ module.exports = {
   updateRequestLocation,
   reupdateRequest,
   getIfIHaveRequest,
+  getUserDetailsByHelperId,
 };

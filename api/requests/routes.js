@@ -12,6 +12,7 @@ const {
   reupdateRequest,
 
   getIfIHaveRequest,
+  getUserDetailsByHelperId,
   // getIfIHaveRequest,
 } = require("./controllers");
 const express = require("express");
@@ -56,18 +57,17 @@ router.put(
 router.put(
   "/requests/close/:_id",
   passport.authenticate("jwt", { session: false }),
-  //
   updateRequest
-  //
 );
-//
 
 router.put(
   "/requests/open/:_id",
   passport.authenticate("jwt", { session: false }),
-  //
+
   reupdateRequest //this will set request status to open incase the helper doesn't fullfill assistance
   //
 );
+
+router.get("/getUserByHelperId/:_id", getUserDetailsByHelperId);
 
 module.exports = router;
